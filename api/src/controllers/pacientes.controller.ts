@@ -1,10 +1,27 @@
 import { Request, Response } from "express";
 import Paciente from "../models/paciente.model";
 
-export const getPacientes = async (req: Request, res: Response):Promise<any> => {
+export const getPacientes = async (req: Request, res: Response): Promise<any> => {
     try {
-        const pacientes = await Paciente.findAll();
-        return res.status(200).json(pacientes);
+        const page = parseInt(req.query.page as string) || 1;
+        const limit = parseInt(req.query.limit as string) || 2;
+        const offset = (page - 1) * limit;
+
+
+        const { count, rows: pacientes } = await Paciente.findAndCountAll({
+            limit: limit,
+            offset: offset,
+            order:[['id','DESC']]
+        });
+
+        const totalPages = Math.ceil(count / limit);
+
+        return res.status(200).json({
+            totalPages,
+            totalPacientes: count,
+            currentPage: page,
+            pacientes
+        });
     } catch (error) {
         console.log(error);
         return res.status(500).json({ message: 'Error al obtener pacientes' });
@@ -13,10 +30,10 @@ export const getPacientes = async (req: Request, res: Response):Promise<any> => 
 
 export const createPaciente = async (req: Request, res: Response) => {
     try {
-        const { nombre, telefono, email } = req.body;
-        const paciente = await Paciente.create({ nombre, telefono, email });
+        const { nombre, dni, telefono, email } = req.body;
+        const paciente = await Paciente.create({ nombre, dni, telefono, email });
         res.status(201).json(paciente);
-        
+
     } catch (error) {
         console.log(error);
         res.status(500).json({ message: 'Error al crear paciente' });
@@ -28,10 +45,10 @@ export const createPaciente = async (req: Request, res: Response) => {
 export const updatePaciente = async (req: Request, res: Response) => {
     try {
         const { id } = req.params;
-        const { nombre, telefono, email } = req.body;
+        const { nombre, dni, telefono, email } = req.body;
         // Actualizar el paciente
         const [affectedRows] = await Paciente.update(
-            { nombre, telefono, email },
+            { nombre, dni, telefono, email },
             { where: { id } }
         );
 
@@ -56,7 +73,7 @@ export const updatePaciente = async (req: Request, res: Response) => {
     }
 }
 
-export const deletePaciente = async (req: Request, res: Response):Promise<void> =>{
+export const deletePaciente = async (req: Request, res: Response): Promise<void> => {
     try {
         const { id } = req.params;
         // Buscar el paciente por su ID

@@ -2,17 +2,21 @@ import React, { useEffect, useState } from 'react';
 import { Button } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import FormPaciente from "./FormPaciente";
-import { getAllPacientes,createPacienteAction,deletePacienteAction, updatePacienteAction } from '../../slices/pacienteSlice'; 
+import { getAllPacientes, createPacienteAction, deletePacienteAction, updatePacienteAction } from '../../slices/pacienteSlice';
 import { swalAlert, swalAlertConfirmDelete } from '../../utils/swalerts';
 
 function PacientesList() {
+
+     //Estado global paciente del store
+     const { pacientes } = useSelector((state) => state.paciente);
+
     // Estado para controlar la visibilidad del modal
     const [showModal, setShowModal] = useState(false);
+    //Estado para paginacion
+    const [currentPage, setCurrentPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(pacientes.totalPages);
 
-    //Estado global paciente del store
-   const { pacientes } = useSelector((state) => state.paciente);
-    
-
+   
     const dispatch = useDispatch();
 
     // Función para abrir el modal
@@ -27,15 +31,17 @@ function PacientesList() {
     //Estado para inputs del fomulario
     const [input, setInput] = useState({
         nombre: '',
+        dni: '',
         telefono: '',
         email: ''
     });
 
-    const clearField=()=>{
+    const clearField = () => {
         setInput({
-            nombre:'',
-            telefono:'',
-            email:''
+            nombre: '',
+            dni: '',
+            telefono: '',
+            email: ''
         })
     }
 
@@ -46,40 +52,54 @@ function PacientesList() {
     const handleSubmit = (e) => {
         e.preventDefault();
         console.log(input)
-        if(!input.id){
+        if (!input.id) {
             dispatch(createPacienteAction(input));
-            swalAlert("Alerta de Éxito","Paciente creado correctamente","success");
-        }else{
-            const idPaciente=input.id;
+            
+            setCurrentPage(1);
+            swalAlert("Alerta de Éxito", "Paciente creado correctamente", "success");
+        } else {
+            const idPaciente = input.id;
             delete input.id
-            dispatch(updatePacienteAction(idPaciente,input));
-            swalAlert("Alerta de Éxito","Paciente actualizado correctamente","success");
+            dispatch(updatePacienteAction(idPaciente, input,currentPage));
+            swalAlert("Alerta de Éxito", "Paciente actualizado correctamente", "success");
         }
-        
+  
         handleCloseModal();
-       
+
     }
 
-    const handleDelete=(id)=>{
-        swalAlertConfirmDelete("¿Estas seguro de eliminar Paciente?","Paciente eliminado correctamente",() => dispatch(deletePacienteAction(id))) // Función de callback que se ejecutará después de la confirmación);
+    const handleDelete = (id) => {
+        swalAlertConfirmDelete("¿Estas seguro de eliminar Paciente?", "Paciente eliminado correctamente", () => dispatch(deletePacienteAction(id))) // Función de callback que se ejecutará después de la confirmación);
         //dispatch(deletePacienteAction(id));
+        setCurrentPage(1);
     }
 
-    const editPaciente=(paciente)=>{
+    const editPaciente = (paciente) => {
         setInput({
-            id:paciente.id,
-            nombre:paciente.nombre,
-            telefono:paciente.telefono,
-            email:paciente.email
+            id: paciente.id,
+            nombre: paciente.nombre,
+            dni: paciente.dni,
+            telefono: paciente.telefono,
+            email: paciente.email
         })
         handleOpenModal();
+    }
+
+    const handlePageChange = (page) => {
+        setCurrentPage(page);
     }
 
     console.log(pacientes)
 
     useEffect(() => {
-        dispatch(getAllPacientes());
-    }, [dispatch])
+        dispatch(getAllPacientes(currentPage));
+       
+        
+    }, [dispatch,currentPage])
+
+    useEffect(()=>{
+        setTotalPages(pacientes.totalPages);
+    },[pacientes.totalPages])
 
     return (
         <>
@@ -110,26 +130,28 @@ function PacientesList() {
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
-                            <table class="table table-striped"  width="100%" cellspacing="0">
+                            <table class="table table-striped" width="100%" cellspacing="0">
                                 <thead>
                                     <tr>
                                         <th>Nombre</th>
+                                        <th>DNI</th>
                                         <th>Telefono</th>
                                         <th>Email</th>
                                         <th>Acciones</th>
 
                                     </tr>
                                 </thead>
-                                
+
                                 <tbody>
-                                    {pacientes && pacientes.map((paciente, index) => (
+                                    {pacientes.pacientes && pacientes.pacientes.map((paciente, index) => (
                                         <tr key={index}>
                                             <td>{paciente.nombre}</td>
+                                            <td>{paciente.dni}</td>
                                             <td>{paciente.telefono}</td>
                                             <td>{paciente.email}</td>
                                             <td>
-                                                <button className="btn btn-warning" onClick={()=>editPaciente(paciente)}>Editar</button>
-                                                <button className="btn btn-danger mx-2" onClick={()=>handleDelete(paciente.id)}>Eliminar</button>
+                                                <button className="btn btn-warning" onClick={() => editPaciente(paciente)}>Editar</button>
+                                                <button className="btn btn-danger mx-2" onClick={() => handleDelete(paciente.id)}>Eliminar</button>
                                             </td>
 
                                         </tr>
@@ -139,7 +161,26 @@ function PacientesList() {
                             </table>
                         </div>
                     </div>
+
                 </div>
+
+                {/* Botones de paginación */}
+                <div>
+                    <button className="btn btn-secondary btn-sm"
+                        onClick={() => handlePageChange(currentPage - 1)}
+                        disabled={currentPage === 1}
+                    >
+                        Anterior
+                    </button>
+                    <span> Página {currentPage} de {totalPages} </span>
+                    <button className="btn btn-secondary btn-sm" 
+                        onClick={() => handlePageChange(currentPage + 1)}
+                        disabled={currentPage === totalPages}
+                    >
+                        Siguiente
+                    </button>
+                </div>
+
             </div>
         </>
     )

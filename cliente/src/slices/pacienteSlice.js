@@ -4,7 +4,7 @@ const URL_API = "http://localhost:3001/api"; // Cambia esto si es necesario
 
 // Estado inicial
 const initialState = {
-    pacientes: [],
+    pacientes: {},
     create:{},
     update:{},
     delete:{}
@@ -37,14 +37,14 @@ export const pacienteSlice = createSlice({
 const { allPacientes, createPaciente, updatePaciente, deletePaciente } = pacienteSlice.actions;
 
 // Funciones asincrónicas para interactuar con la API
-const Pacientes = async () => {
-    const response = await axios.get(`${URL_API}/pacientes`);
+const Pacientes = async (page) => {
+    const response = await axios.get(`${URL_API}/pacientes?page=${page}&limit=5`);
     return response.data;
 };
 
 // Obtener todos los pacientes
-export const getAllPacientes = () => async (dispatch) => {
-    let dataPacientes = await Pacientes();
+export const getAllPacientes = (page) => async (dispatch) => {
+    let dataPacientes = await Pacientes(page);
     dispatch(allPacientes({dataPacientes}));
 };
 
@@ -56,9 +56,9 @@ export const createPacienteAction = (paciente) => async (dispatch) => {
 };
 
 // Actualizar un paciente
-export const updatePacienteAction = (id, paciente) => async (dispatch) => {
+export const updatePacienteAction = (id, paciente,page) => async (dispatch) => {
     const response = await axios.put(`${URL_API}/pacientes/${id}`, paciente);
-    let dataPacientes = await Pacientes();
+    let dataPacientes = await Pacientes(page);
     return dispatch(updatePaciente({ dataPacientes,dataUpdate:response.data }));
 };
 

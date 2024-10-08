@@ -17,8 +17,10 @@ export const userValidationRule = [
 
 export const pacienteValidationRule = [
     body('nombre')
-        .notEmpty().withMessage('El nombre de usuario es requerido')
-        .isLength({ max: 30 }).withMessage('El nombre de usuario debe tener al menos 30 caracteres'),
+        .notEmpty().withMessage('El nombre de paciente es requerido')
+        .isLength({ max: 30 }).withMessage('El nombre de paciente debe tener al menos 30 caracteres'),
+    body('dni')
+        .notEmpty().withMessage('El dni del paciente es requerido'),
     body('telefono')
         .notEmpty().withMessage('El telefono es requerido'),
     body('email')

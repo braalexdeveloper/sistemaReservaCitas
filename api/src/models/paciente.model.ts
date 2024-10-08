@@ -5,6 +5,7 @@ import sequelize from '../config/db.config';
 
 class Paciente extends Model{
     public id!:number;
+    public dni!:string;
     public nombre!:string;
     public telefono!:string;
     public email!:string;
@@ -17,6 +18,10 @@ Paciente.init(
             autoIncrement:true,
             primaryKey:true
         },
+        dni:{
+          type:DataTypes.STRING,
+          unique:true
+        },
         nombre:{
             type:DataTypes.STRING,
             allowNull:false
@@ -27,6 +32,7 @@ Paciente.init(
         },
         email:{
             type:DataTypes.STRING,
+            unique:true,
             allowNull:false
         }
     },
