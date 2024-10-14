@@ -1,10 +1,37 @@
 import { Request, Response } from "express";
 import Cita from "../models/cita.model";
+import Paciente from "../models/paciente.model";
+import Servicio from "../models/servicio.model";
+
 
 export const getCitas = async (req: Request, res: Response) => {
     try {
-        const citas = await Cita.findAll();
-        res.status(200).json({citas});
+        const citas = await Cita.findAll({
+            include: [
+                {
+                    model: Paciente,   // Incluye el modelo Paciente
+                    attributes: ['nombre', 'dni','telefono'] // Solo trae campos específicos, opcional
+                },
+                {
+                    model: Servicio// Solo trae campos específicos, opcional
+                }
+            ]
+        });
+
+           // Convertir fechaCita al formato deseado
+           const citasFormateadas = citas.map(cita => {
+            const fecha = new Date(cita.fechaCita);
+            const dia = String(fecha.getDate()).padStart(2, '0');
+            const mes = String(fecha.getMonth() + 1).padStart(2, '0'); // Los meses van de 0 a 11
+            const anio = fecha.getFullYear();
+
+            return {
+                ...cita.toJSON(), // Convierte la instancia de Sequelize a JSON
+                fechaCita: `${dia}/${mes}/${anio}` // Formato DD/MM/YYYY
+            };
+        });
+        
+        res.status(200).json({citas:citasFormateadas});
     } catch (error) {
         console.log(error);
         res.status(500).json({ message: 'Error al obtener citas' });

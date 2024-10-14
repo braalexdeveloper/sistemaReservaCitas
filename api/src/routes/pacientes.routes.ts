@@ -5,14 +5,10 @@ import { pacienteValidationRule, validateFields } from "../middleware/validation
 
 const router=Router();
 
-/*router.get('/',verifyToken,getPacientes);
+router.get('/',verifyToken,getPacientes);
 router.post('/',verifyToken,pacienteValidationRule, validateFields,createPaciente);
 router.put('/:id',verifyToken,pacienteValidationRule, validateFields,updatePaciente);
-router.delete('/:id',verifyToken,deletePaciente);*/
+router.delete('/:id',verifyToken,deletePaciente);
 
-router.get('/',getPacientes);
-router.post('/',pacienteValidationRule, validateFields,createPaciente);
-router.put('/:id',pacienteValidationRule, validateFields,updatePaciente);
-router.delete('/:id',deletePaciente);
 
 export default router;

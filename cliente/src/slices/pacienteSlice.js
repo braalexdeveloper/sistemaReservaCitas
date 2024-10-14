@@ -10,6 +10,17 @@ const initialState = {
     delete:{}
 };
 
+function token(){
+    const token = JSON.parse(localStorage.getItem('dataLogin'))?.token; // Recupera el token del localStorage
+    return token;
+}
+console.log("token desde slicePaciente",token())
+const headers={
+    headers:{
+        "Content-Type":"application/json",
+        "Authorization":`Bearer ${token()}`
+    }
+}
 // Creación del slice para gestionar pacientes
 export const pacienteSlice = createSlice({
     name: "paciente",
@@ -38,7 +49,7 @@ const { allPacientes, createPaciente, updatePaciente, deletePaciente } = pacient
 
 // Funciones asincrónicas para interactuar con la API
 const Pacientes = async (page) => {
-    const response = await axios.get(`${URL_API}/pacientes?page=${page}&limit=5`);
+    const response = await axios.get(`${URL_API}/pacientes?page=${page}&limit=5`,headers);
     return response.data;
 };
 
@@ -50,21 +61,21 @@ export const getAllPacientes = (page) => async (dispatch) => {
 
 // Crear un paciente
 export const createPacienteAction = (paciente) => async (dispatch) => {
-    const response = await axios.post(`${URL_API}/pacientes`, paciente);
+    const response = await axios.post(`${URL_API}/pacientes`, paciente,headers);
     let dataPacientes = await Pacientes();
     return dispatch(createPaciente({ dataPacientes,dataCreate:response.data }));
 };
 
 // Actualizar un paciente
 export const updatePacienteAction = (id, paciente,page) => async (dispatch) => {
-    const response = await axios.put(`${URL_API}/pacientes/${id}`, paciente);
+    const response = await axios.put(`${URL_API}/pacientes/${id}`, paciente,headers);
     let dataPacientes = await Pacientes(page);
     return dispatch(updatePaciente({ dataPacientes,dataUpdate:response.data }));
 };
 
 // Eliminar un paciente
 export const deletePacienteAction = (id) => async (dispatch) => {
-    const response = await axios.delete(`${URL_API}/pacientes/${id}`);
+    const response = await axios.delete(`${URL_API}/pacientes/${id}`,headers);
     let dataPacientes = await Pacientes();
     return dispatch(deletePaciente({ dataPacientes,dataDelete:response.data }));
 };
