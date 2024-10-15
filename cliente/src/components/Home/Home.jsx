@@ -2,17 +2,34 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllPacientes } from "../../slices/pacienteSlice";
 import { getAllServicios } from "../../slices/servicioSlice";
+import { getCitasToday } from "../../slices/citaSlice";
 
 
 const Home = () => {
 
     const {pacientes}=useSelector(state=>state.paciente);
     const {servicios}=useSelector(state=>state.servicio);
+    const { citas,countCitasToday }=useSelector(state=>state.cita);
     const dispatch=useDispatch();
+
+    // Crear un nuevo objeto Date para obtener la fecha actual
+const fechaActual = new Date();
+
+// Obtener el año, mes y día
+const anio = fechaActual.getFullYear();
+const mes = String(fechaActual.getMonth() + 1).padStart(2, '0'); // Los meses son 0-indexados, así que sumamos 1
+const dia = String(fechaActual.getDate()).padStart(2, '0'); // Asegurarse de que el día tenga dos dígitos
+
+// Formatear la fecha en el formato YYYY-MM-DD
+const fechaFormateada = `${anio}-${mes}-${dia}`;
+
+console.log(fechaFormateada); // Ejemplo de salida: 2024-10-14
+
 
     useEffect(()=>{
      dispatch(getAllPacientes());
      dispatch(getAllServicios());
+     dispatch(getCitasToday(fechaFormateada));
     },[dispatch])
     return (
         <>
@@ -26,7 +43,7 @@ const Home = () => {
                                 <div className="col mr-2">
                                     <div className="text-xs font-weight-bold text-primary text-uppercase mb-1">
                                         Citas para Hoy</div>
-                                    <div className="h5 mb-0 font-weight-bold text-gray-800">4</div>
+                                    <div className="h5 mb-0 font-weight-bold text-gray-800">{countCitasToday}</div>
                                 </div>
                                 <div className="col-auto">
                                     <i className="fas fa-calendar fa-2x text-gray-300"></i>

@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 const URL_API = "http://localhost:3001/api"; // Cambia esto si es necesario
+import getHeaders from "./headers";
 
 const initialState={
     servicios:[],
@@ -10,17 +11,6 @@ const initialState={
 
 }
 
-function token(){
-  const token = JSON.parse(localStorage.getItem('dataLogin'))?.token; // Recupera el token del localStorage
-  return token;
-}
-
-const headers={
-  headers:{
-      "Content-Type":"application/json",
-      "Authorization":`Bearer ${token()}`
-  }
-}
 
 export const servicioSlice=createSlice({
     name:'servicio',
@@ -47,7 +37,7 @@ state.create=action.payload.responseCreate
 const {allServicios,createServicio,updateServicio,deleteServicio}=servicioSlice.actions;
 
 const servicios=async()=>{
-    let response=await axios.get(`${URL_API}/servicios`,headers);
+    let response=await axios.get(`${URL_API}/servicios`,getHeaders());
     return response.data.servicios;
 }
 
@@ -57,19 +47,19 @@ dispatch(allServicios({dataServicio}));
 }
 
 export const createServicioAction=(servicio)=>async(dispatch)=>{
-  const responseCreate=await axios.post(`${URL_API}/servicios`,servicio,headers);
+  const responseCreate=await axios.post(`${URL_API}/servicios`,servicio,getHeaders());
   const dataServicio=await servicios();
   dispatch(createServicio({responseCreate,dataServicio}));
 }
 
 export const updateServicioAction=(id,servicio)=>async(dispatch)=>{
-const responseUpdate=await axios.put(`${URL_API}/servicios/`+id,servicio,headers);
+const responseUpdate=await axios.put(`${URL_API}/servicios/`+id,servicio,getHeaders());
 const dataServicio=await servicios();
 dispatch(updateServicio({responseUpdate,dataServicio}));
 }
 
 export const deleteServicioAction=(id)=>async(dispatch)=>{
-const responseDelete=await axios.delete(`${URL_API}/servicios/`+id,headers);
+const responseDelete=await axios.delete(`${URL_API}/servicios/`+id,getHeaders());
 const dataServicio=await servicios();
 dispatch(deleteServicio({responseDelete,dataServicio}));
 }
