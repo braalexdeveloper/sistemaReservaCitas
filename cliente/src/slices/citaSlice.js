@@ -83,7 +83,7 @@ export const getCitasToday=(fecha)=>async(dispatch)=>{
     const response = await axios.get(`${URL_API}/citas/citasByDate?fechaCita=${fecha}`, getHeaders());
     const countCitas=response.data.citas.length;
     console.log("cantidad de citas hoy:",countCitas)
-    return dispatch(citasToday({ countCitas }));
+    return dispatch(citasToday({ countCitas,dataCitas:response.data.citas }));
 }
 
 // Exportar el reducer

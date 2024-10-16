@@ -2,14 +2,16 @@ import React, { useEffect, useState } from 'react';
 import { Button } from 'react-bootstrap';
 import FormCita from './FormCita';
 import { useDispatch, useSelector } from 'react-redux';
-import { createCitaAction, deleteCitaAction, getAllCitas, updateCitaAction } from '../../slices/citaSlice';
+import { createCitaAction, deleteCitaAction, getAllCitas, getCitasToday, updateCitaAction } from '../../slices/citaSlice';
 import { getAllServicios } from '../../slices/servicioSlice';
 import { swalAlert, swalAlertConfirmDelete } from '../../utils/swalerts';
 import { getAllPacientes } from '../../slices/pacienteSlice';
+import { useParams } from 'react-router-dom';
 
 const CitasList = () => {
    //state for the modal
  const [showModal, setShowModal] = useState(false);
+ const [fecha,setFecha]=useState('');
 
  const authId=JSON.parse(localStorage.getItem("dataLogin"))?.user.id;
  
@@ -24,7 +26,8 @@ const CitasList = () => {
      estado:'Pendiente'
 
  });
-
+//Obtener parametro de la url
+const { fecha:fechaParametro }=useParams();
  //state global servicios
  const { servicios } = useSelector((state) => state.servicio);
  //state global pacientes
@@ -109,13 +112,28 @@ function convertirFecha(fecha) {
      })
  }
 
+ const handleFecha=(e)=>{
+   setFecha(e.target.value)
+ }
+
+ const searchFecha=()=>{
+    console.log(fecha)
+    dispatch(getCitasToday(fecha))
+ }
 
 
  useEffect(() => {
-     dispatch(getAllCitas());
+    if (fechaParametro) {
+        setFecha(fechaParametro);
+        dispatch(getCitasToday(fechaParametro)); // Llamar la acción para buscar citas
+      } else {
+        dispatch(getAllCitas());
+      }
+     
      dispatch(getAllServicios());
      dispatch(getAllPacientes());
- }, [dispatch])
+     
+ }, [dispatch,fechaParametro])
 
   return (
     <>
@@ -134,6 +152,21 @@ function convertirFecha(fecha) {
                 </Button>
 
                 <FormCita servicios={servicios} pacientes={pacientes.pacientes} handleCloseModal={handleCloseModal} showModal={showModal} handleChange={handleChange} input={input} handleSubmit={handleSubmit} />
+            </div>
+
+            <div className="row px-2 py-2">
+              
+              <form class="d-none d-sm-inline-block col-3 form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
+                        <div class="input-group">
+                            <input type="date" name="fecha" value={fecha} class="form-control bg-light  small" placeholder="Search for..."
+                                aria-label="Search" aria-describedby="basic-addon2" onChange={(e)=>handleFecha(e)}/>
+                            <div class="input-group-append">
+                                <button class="btn btn-primary" type="button" onClick={searchFecha}>
+                                    <i class="fas fa-search fa-sm"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </form>
             </div>
 
 

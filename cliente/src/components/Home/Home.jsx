@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getAllPacientes } from "../../slices/pacienteSlice";
 import { getAllServicios } from "../../slices/servicioSlice";
 import { getCitasToday } from "../../slices/citaSlice";
+import { useNavigate } from "react-router-dom";
 
 
 const Home = () => {
@@ -11,7 +12,7 @@ const Home = () => {
     const {servicios}=useSelector(state=>state.servicio);
     const { citas,countCitasToday }=useSelector(state=>state.cita);
     const dispatch=useDispatch();
-
+const navigate=useNavigate();
     // Crear un nuevo objeto Date para obtener la fecha actual
 const fechaActual = new Date();
 
@@ -25,6 +26,9 @@ const fechaFormateada = `${anio}-${mes}-${dia}`;
 
 console.log(fechaFormateada); // Ejemplo de salida: 2024-10-14
 
+const verCitasHoy=()=>{
+ navigate("/citas/"+fechaFormateada)
+}
 
     useEffect(()=>{
      dispatch(getAllPacientes());
@@ -37,13 +41,16 @@ console.log(fechaFormateada); // Ejemplo de salida: 2024-10-14
 
 
                 <div className="col-xl-4 col-md-6 mb-4">
-                    <div className="card border-left-primary shadow h-100 py-2">
+                    <div className="card border-left-primary shadow h-100 py-2 px-2">
                         <div className="card-body">
                             <div className="row no-gutters align-items-center">
                                 <div className="col mr-2">
-                                    <div className="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                    <div className="text-xl font-weight-bold text-primary text-uppercase mb-1">
                                         Citas para Hoy</div>
-                                    <div className="h5 mb-0 font-weight-bold text-gray-800">{countCitasToday}</div>
+                                    <div className="h3 mb-0 font-weight-bold text-gray-800">{countCitasToday}</div>
+                                    <div className="h6 mb-0 py-2 text-secundary" >
+                                        <button onClick={verCitasHoy}>Ver Información</button>
+                                        </div>
                                 </div>
                                 <div className="col-auto">
                                     <i className="fas fa-calendar fa-2x text-gray-300"></i>

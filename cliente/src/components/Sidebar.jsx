@@ -33,7 +33,7 @@ const Sidebar = () => {
         </li>
 
         <li class="nav-item">
-        <Link class="nav-link" to="/citas">
+        <Link class="nav-link" to="/citas/">
         <i class="fas fa-address-card"></i>
                 <span>Citas</span></Link>
         </li>

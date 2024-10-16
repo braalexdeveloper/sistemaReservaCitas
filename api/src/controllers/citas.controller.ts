@@ -63,11 +63,41 @@ export const getCitasByDate = async (req: Request, res: Response) => {
                 fechaCita: {
                     [Op.between]: [startOfDay, endOfDay]
                 }
-            }
+            },
+            include: [
+                {
+                    model: Paciente,   // Incluye el modelo Paciente
+                    attributes: ['nombre', 'dni', 'telefono'] // Solo trae campos específicos, opcional
+                },
+                {
+                    model: Servicio// Solo trae campos específicos, opcional
+                }
+            ]
         });
 
+        // Convertir fechaCita al formato deseado
+ const citasFormateadas = citasByDate.map(cita => {
+    const fechaUTC = new Date(cita.fechaCita); // La fecha ya está en formato UTC
+
+    // Usar toLocaleDateString para obtener la fecha en formato local
+    const opciones:any = { 
+        day: '2-digit', 
+        month: '2-digit', 
+        year: 'numeric',
+        timeZone: 'UTC' // Asegúrate de que la zona horaria sea la correcta
+    };
+    const fechaFormateada = fechaUTC.toLocaleDateString('es-ES', opciones);
+
+    console.log("Fecha original:", cita.fechaCita, "Fecha formateada:", fechaFormateada);
+
+    return {
+        ...cita.toJSON(),
+        fechaCita: fechaFormateada // Formato DD/MM/YYYY
+    };
+});
+
         res.status(200).json({
-            citas: citasByDate
+            citas: citasFormateadas
         });
     } catch (error) {
         console.log(error);
