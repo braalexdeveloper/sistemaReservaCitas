@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { swalAlert } from "../utils/swalerts";
 import { useNavigate } from "react-router-dom";
+import logo from '../assets/img/logo-blue.png';
 
 function Login() {
     const navigate = useNavigate();
@@ -67,11 +68,13 @@ function Login() {
                         <div class="card-body p-0">
 
                             <div class="row">
-                                <div class="col-lg-6 d-none d-lg-block bg-login-image"></div>
+                                <div class="col-lg-6 d-flex d-lg-flex justify-content-center align-items-center   bg-login-image ">
+                                <img src={logo} width={200} alt='mydent' />
+                                </div>
                                 <div class="col-lg-6">
                                     <div class="p-5">
                                         <div class="text-center">
-                                            <h1 class="h4 text-gray-900 mb-4">Sistema de Reserva de Citas Medicas</h1>
+                                            <h1 class="h4 text-gray-900 mb-4">Sistema de Reserva de Citas</h1>
                                         </div>
                                         <form class="user" onSubmit={(e) => login(e)}>
                                             <div class="form-group">
@@ -90,13 +93,13 @@ function Login() {
 
 
                                         </form>
-                                        <hr />
+                                        {/*<hr />
                                         <div class="text-center">
                                             <a class="small" href="forgot-password.html">Forgot Password?</a>
                                         </div>
                                         <div class="text-center">
                                             <a class="small" href="register.html">Create an Account!</a>
-                                        </div>
+                                        </div>*/}
                                     </div>
                                 </div>
                             </div>

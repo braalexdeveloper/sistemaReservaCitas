@@ -6,12 +6,13 @@ import { createCitaAction, deleteCitaAction, getAllCitas, getCitasToday, updateC
 import { getAllServicios } from '../../slices/servicioSlice';
 import { swalAlert, swalAlertConfirmDelete } from '../../utils/swalerts';
 import { getAllPacientes } from '../../slices/pacienteSlice';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 const CitasList = () => {
    //state for the modal
  const [showModal, setShowModal] = useState(false);
  const [fecha,setFecha]=useState('');
+ const navigate=useNavigate();
 
  const authId=JSON.parse(localStorage.getItem("dataLogin"))?.user.id;
  
@@ -121,6 +122,12 @@ function convertirFecha(fecha) {
     dispatch(getCitasToday(fecha))
  }
 
+ const verCitas=()=>{
+    dispatch(getAllCitas());
+    setFecha('')
+    navigate('/citas')
+ }
+
 
  useEffect(() => {
     if (fechaParametro) {
@@ -167,6 +174,7 @@ function convertirFecha(fecha) {
                             </div>
                         </div>
                     </form>
+                    <button className='btn btn-primary col-2' onClick={verCitas}>Ver Todas</button>
             </div>
 
 

@@ -39,7 +39,7 @@ const Dashboard = () => {
                             <i className="fa fa-bars"></i>
                         </button>
                        <div className="title">
-                       <h1>RESERVA DE CITAS</h1>
+                       
                        </div>
                        
 

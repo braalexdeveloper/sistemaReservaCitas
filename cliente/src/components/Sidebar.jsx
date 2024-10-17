@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import logo from '../assets/img/logo-whi.png';
 
 const Sidebar = () => {
   return (
@@ -8,7 +9,9 @@ const Sidebar = () => {
 
         <Link class="sidebar-brand d-flex align-items-center justify-content-center" to="/">
             
-            <div class="sidebar-brand-text mx-3">Multident</div>
+            <div class="sidebar-brand-text ">
+                <img src={logo} alt='mydent' />
+            </div>
         </Link>
 
        
@@ -33,7 +36,7 @@ const Sidebar = () => {
         </li>
 
         <li class="nav-item">
-        <Link class="nav-link" to="/citas/">
+        <Link class="nav-link" to="/citas">
         <i class="fas fa-address-card"></i>
                 <span>Citas</span></Link>
         </li>
