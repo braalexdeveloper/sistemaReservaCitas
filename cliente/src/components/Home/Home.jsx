@@ -35,7 +35,7 @@ const verPacientes=()=>{
    }
 
    const verServicios=()=>{
-    navigate("/servicios")
+    navigate("/especialidades")
    }
     useEffect(()=>{
      dispatch(getAllPacientes());
@@ -56,7 +56,7 @@ const verPacientes=()=>{
                                         Citas para Hoy</div>
                                     <div className="h3 mb-0 font-weight-bold text-gray-800">{countCitasToday}</div>
                                     <div className="h6 mb-0 py-2 text-secundary" >
-                                        <button className="btn btn-sm btn-primary" onClick={verCitasHoy}>Ver Información</button>
+                                        <button className="btn btn-sm btn-primary" onClick={verCitasHoy}> Ver Información <i class="fas fa-arrow-circle-right"></i> </button>
                                         </div>
                                 </div>
                                 <div className="col-auto">
@@ -77,7 +77,7 @@ const verPacientes=()=>{
                                         Pacientes</div>
                                     <div className="h3 mb-0 font-weight-bold text-gray-800">{pacientes.totalPacientes}</div>
                                     <div className="h6 mb-0 py-2 text-secundary" >
-                                        <button className="btn btn-sm btn-success" onClick={verPacientes}>Ver Información</button>
+                                        <button className="btn btn-sm btn-success" onClick={verPacientes}>Ver Información <i class="fas fa-arrow-circle-right"></i></button>
                                         </div>
                                 </div>
                                 <div className="col-auto">
@@ -94,14 +94,14 @@ const verPacientes=()=>{
                         <div className="card-body">
                             <div className="row no-gutters align-items-center">
                                 <div className="col mr-2">
-                                    <div className="text-xl font-weight-bold text-info text-uppercase mb-1">Servicios
+                                    <div className="text-xl font-weight-bold text-info text-uppercase mb-1">Espacialidades
                                     </div>
                                     <div className="row no-gutters align-items-center">
                                         <div className="col-auto">
                                             <div className="h3 mb-0 px-2 font-weight-bold text-gray-800">{servicios.length}</div>
                                         </div>
                                         <div className="h6 mb-0 py-2 text-secundary" >
-                                        <button className="btn btn-sm btn-info" onClick={verServicios}>Ver Información</button>
+                                        <button className="btn btn-sm btn-info" onClick={verServicios}>Ver Información <i class="fas fa-arrow-circle-right"></i></button>
                                         </div>
                                     </div>
                                 </div>

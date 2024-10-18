@@ -1,5 +1,6 @@
 import { body, validationResult } from "express-validator";
 import { Request, Response, NextFunction } from "express";
+import Paciente from "../models/paciente.model";
 
 export const userValidationRule = [
     body('nombre')
@@ -20,12 +21,26 @@ export const pacienteValidationRule = [
         .notEmpty().withMessage('El nombre de paciente es requerido')
         .isLength({ max: 30 }).withMessage('El nombre de paciente debe tener al menos 30 caracteres'),
     body('dni')
-        .notEmpty().withMessage('El dni del paciente es requerido'),
+        .notEmpty().withMessage('El dni del paciente es requerido')
+        .custom(async (value) => {
+            // Busca en la base de datos si el DNI ya existe
+            const paciente = await Paciente.findOne({ where: { dni: value } });
+            if (paciente) {
+                return Promise.reject('El DNI ya está registrado');
+            }
+        }),
     body('telefono')
         .notEmpty().withMessage('El telefono es requerido'),
     body('email')
         .notEmpty().withMessage('El email es requerido')
         .isEmail().withMessage('El email debe ser válido')
+        .custom(async (value) => {
+            // Busca en la base de datos si el email ya existe
+            const paciente = await Paciente.findOne({ where: { email: value } });
+            if (paciente) {
+                return Promise.reject('El email ya está registrado');
+            }
+        })
     
 ];
 

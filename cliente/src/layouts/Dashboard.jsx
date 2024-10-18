@@ -7,6 +7,60 @@ import { Navigate, Outlet } from "react-router-dom";
 
 
 const Dashboard = () => {
+   // Estado para controlar si el sidebar está toggled o no
+   const [isToggled, setIsToggled] = useState(true);
+
+   // Función para alternar el estado del sidebar
+   const handleToggle = () => {
+     setIsToggled(!isToggled);
+   };
+ 
+   // Función para cerrar los menús cuando la ventana cambia de tamaño
+   const handleResize = () => {
+     if (window.innerWidth < 768) {
+       setIsToggled(false); // Cerrar si la ventana es pequeña
+     }
+ 
+     if (window.innerWidth < 480 && !isToggled) {
+       setIsToggled(true); // Forzar toggle en pantallas muy pequeñas
+     }
+     if(window.innerWidth>768){
+setIsToggled(true);
+     }
+   };
+ 
+   // Detectar el scroll y mostrar/ocultar el botón de scroll-to-top
+   const handleScroll = () => {
+     const scrollDistance = window.scrollY;
+     const scrollButton = document.querySelector('.scroll-to-top');
+     if (scrollButton) {
+       if (scrollDistance > 50) {
+         scrollButton.style.display = 'block';
+       } else {
+         scrollButton.style.display = 'none';
+       }
+     }
+   };
+
+   const scrollToTop = () => {
+    window.scrollTo({
+        top: 0,
+        behavior: 'smooth' // para un desplazamiento suave
+    });
+};
+
+ 
+   // Hook para manejar eventos de resize y scroll
+   useEffect(() => {
+     window.addEventListener('resize', handleResize);
+     window.addEventListener('scroll', handleScroll);
+ 
+     // Limpiar los eventos cuando el componente se desmonte
+     return () => {
+       window.removeEventListener('resize', handleResize);
+       window.removeEventListener('scroll', handleScroll);
+     };
+   }, [isToggled]);
     
     const [auth,setAuth]=useState(true);
     const storedUser = JSON.parse(localStorage.getItem("dataLogin"));
@@ -23,7 +77,7 @@ const Dashboard = () => {
     return (
         <>
         <div id="wrapper">
-            <Sidebar />
+        <Sidebar isToggled={isToggled} />
 
             {/* Content Wrapper */}
             <div id="content-wrapper" className="d-flex flex-column">
@@ -35,7 +89,7 @@ const Dashboard = () => {
                     <nav className="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
 
                         {/* Sidebar Toggle (Topbar) */}
-                        <button id="sidebarToggleTop" className="btn btn-link d-md-none rounded-circle mr-3">
+                        <button id="sidebarToggleTop" onClick={handleToggle} className="btn btn-link d-md-none rounded-circle ml-2 mr-3">
                             <i className="fa fa-bars"></i>
                         </button>
                        <div className="title">
@@ -46,29 +100,7 @@ const Dashboard = () => {
                         {/* Topbar Navbar */}
                         <ul className="navbar-nav ml-auto">
 
-                            {/* Nav Item - Search Dropdown (Visible Only XS) */}
-                            <li className="nav-item dropdown no-arrow d-sm-none">
-                                <a className="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button"
-                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <i className="fas fa-search fa-fw"></i>
-                                </a>
-                                {/* Dropdown - Messages */}
-                                <div className="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in"
-                                    aria-labelledby="searchDropdown">
-                                    <form className="form-inline mr-auto w-100 navbar-search">
-                                        <div className="input-group">
-                                            <input type="text" className="form-control bg-light border-0 small"
-                                                placeholder="Search for..." aria-label="Search"
-                                                aria-describedby="basic-addon2" />
-                                            <div className="input-group-append">
-                                                <button className="btn btn-primary" type="button">
-                                                    <i className="fas fa-search fa-sm"></i>
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </form>
-                                </div>
-                            </li>
+                            
 
                             {/* Nav Item - User Information */}
                             <li className="nav-item dropdown no-arrow">
@@ -129,7 +161,7 @@ const Dashboard = () => {
 
             </div>
             {/* End of Content Wrapper */}
-            <Footer />
+            <Footer scrollToTop={scrollToTop} />
             </div>
         </>
     );

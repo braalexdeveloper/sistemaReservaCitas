@@ -2,7 +2,7 @@ import { Button } from "react-bootstrap";
 import React, { useEffect, useState } from "react";
 import FormServicio from "./FormServicio";
 import { useDispatch, useSelector } from "react-redux";
-import { getAllServicios,createServicioAction, updateServicioAction, deleteServicioAction } from "../../slices/servicioSlice";
+import { getAllServicios, createServicioAction, updateServicioAction, deleteServicioAction } from "../../slices/servicioSlice";
 import { swalAlert } from "../../utils/swalerts";
 
 function ServiciosList() {
@@ -30,19 +30,35 @@ function ServiciosList() {
         })
     }
 
+    //Limpiar campos
+    const clearField = () => {
+        setInput({
+            nombre: '',
+            descripcion: ''
+        })
+    }
+
     //Función para enviar el formulario
     const handleSubmit = (e) => {
         e.preventDefault();
-if(!input.id){
-    dispatch(createServicioAction(input));
-    swalAlert("Servicio creado correctamente", "Alerta de éxito", "success");
-}else{
-    const idServicio=input.id;
-    delete input.id;
-    dispatch(updateServicioAction(idServicio,input));
-    swalAlert("Servicio actualizado correctamente", "Alerta de éxito", "success");
-}
-       
+
+        const regex = /^[a-zA-Z\s]*$/; // Solo letras y espacios
+        if (!regex.test(input.nombre)) {
+           
+            swalAlert("El nombre no debe contener números.", "", "error");
+            return;
+        } 
+
+        if (!input.id) {
+            dispatch(createServicioAction(input));
+            swalAlert("Especialidad creada correctamente", "Alerta de éxito", "success");
+        } else {
+            const idServicio = input.id;
+            delete input.id;
+            dispatch(updateServicioAction(idServicio, input));
+            swalAlert("Servicio actualizado correctamente", "Alerta de éxito", "success");
+        }
+
 
         handleCloseModal();
     }
@@ -59,9 +75,9 @@ if(!input.id){
     }
 
     //Metodo para eliminar servicio
-    const deleteServicio=(id)=>{
-     dispatch(deleteServicioAction(id));
-     swalAlert("Servicio Eliminado","Alerta de éxito","success");
+    const deleteServicio = (id) => {
+        dispatch(deleteServicioAction(id));
+        swalAlert("Servicio Eliminado", "Alerta de éxito", "success");
     }
 
     //Metodo para abrir y cerrar modal
@@ -72,7 +88,7 @@ if(!input.id){
 
     const handleCloseModal = () => {
         setShowModal(false);
-
+        clearField();
     }
 
     console.log(servicios)
@@ -85,15 +101,14 @@ if(!input.id){
         <>
             {/* Page Heading */}
             <div className="d-sm-flex align-items-center justify-content-between mb-4">
-                <h1 className="h3 mb-0 text-gray-800">Servicios</h1>
-                <a href="#" className="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
-                    className="fas fa-download fa-sm text-white-50"></i> Generate Report</a>
+                <h1 className="h3 mb-0 text-gray-800">Especialidades</h1>
+                
             </div>
 
             <div className="row px-2">
                 {/* Botón que abre el modal */}
-                <Button variant="success" className='col-3 my-2' onClick={handleOpenModal}>
-                    Añadir Servicio
+                <Button variant="success" className='col-6 col-sm-6 col-xl-3 my-2' onClick={handleOpenModal}>
+                    Añadir Especialidad
                 </Button>
 
                 <FormServicio handleCloseModal={handleCloseModal} showModal={showModal} handleChange={handleChange} input={input} handleSubmit={handleSubmit} />
@@ -105,7 +120,7 @@ if(!input.id){
 
                 <div class="card shadow mb-4 col-12">
                     <div class="card-header py-3">
-                        <h6 class="m-0 font-weight-bold text-primary">Listado de Servicios</h6>
+                        <h6 class="m-0 font-weight-bold text-primary">Listado de Especialidades</h6>
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
@@ -120,13 +135,14 @@ if(!input.id){
                                 </thead>
 
                                 <tbody>
-                                    {servicios && servicios.map((servicio,index) => (
+                                    {servicios && servicios.map((servicio, index) => (
                                         <tr key={index}>
                                             <td>{servicio.nombre}</td>
                                             <td>{servicio.descripcion}</td>
                                             <td>
-                                                <button className="btn btn-warning" onClick={()=>editServicio(servicio)}>Editar</button>
-                                                <button className="btn btn-danger mx-2" onClick={()=>deleteServicio(servicio.id)}>Eliminar</button>
+                                                <button className="btn btn-warning" onClick={() => editServicio(servicio)}><i class="fas fa-edit"></i></button>
+                                                <button className="btn btn-danger mx-2" onClick={() => deleteServicio(servicio.id)}><i class="fas fa-trash"></i>
+                                                </button>
                                             </td>
 
                                         </tr>

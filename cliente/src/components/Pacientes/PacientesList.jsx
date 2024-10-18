@@ -107,13 +107,12 @@ function PacientesList() {
             {/* Page Heading */}
             <div className="d-sm-flex align-items-center justify-content-between mb-4">
                 <h1 className="h3 mb-0 text-gray-800">Pacientes</h1>
-                <a href="#" className="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
-                    className="fas fa-download fa-sm text-white-50"></i> Generate Report</a>
+               
             </div>
 
             <div className="row px-2">
                 {/* Botón que abre el modal */}
-                <Button variant="success" className='col-3 my-2' onClick={handleOpenModal}>
+                <Button variant="success" className='col-6 col-sm-6 col-xl-3 my-2' onClick={handleOpenModal}>
                     Añadir Paciente
                 </Button>
 
@@ -150,8 +149,9 @@ function PacientesList() {
                                             <td>{paciente.telefono}</td>
                                             <td>{paciente.email}</td>
                                             <td>
-                                                <button className="btn btn-warning" onClick={() => editPaciente(paciente)}>Editar</button>
-                                                <button className="btn btn-danger mx-2" onClick={() => handleDelete(paciente.id)}>Eliminar</button>
+                                                <button className="btn btn-warning" onClick={() => editPaciente(paciente)}><i class="fas fa-edit"></i></button>
+                                                <button className="btn btn-danger mx-2" onClick={() => handleDelete(paciente.id)}><i class="fas fa-trash"></i>
+                                                </button>
                                             </td>
 
                                         </tr>

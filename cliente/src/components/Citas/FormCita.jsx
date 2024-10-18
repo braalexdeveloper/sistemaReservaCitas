@@ -7,7 +7,7 @@ const FormCita=({showModal,handleCloseModal,input,handleChange,handleSubmit,serv
          {/* Modal que contiene el formulario */}
          <Modal show={showModal} onHide={handleCloseModal}>
                     <Modal.Header closeButton className="bg-primary text-white">
-                        <Modal.Title>{!input.id ? "Añadir Paciente" : "Editar Paciente"}</Modal.Title>
+                        <Modal.Title>{!input.id ? "Añadir Cita" : "Editar Cita"}</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
                         {/* Aquí renderizas el formulario */}
@@ -30,9 +30,9 @@ const FormCita=({showModal,handleCloseModal,input,handleChange,handleSubmit,serv
 
                                 </div>
                                 <div class="mb-3">
-                                    <label for="servicio"  class="form-label">Servicio</label>
+                                    <label for="servicio"  class="form-label">Especialidad</label>
                                     <select name="servicioId" value={input.servicioId} onChange={(e)=>handleChange(e)} className="form-select">
-                                    <option value="">Selecciona un Servicio</option>
+                                    <option value="">Selecciona una Especialidad</option>
                                         {servicios && servicios.map((servicio,index)=>(
                                             <option key={index} value={servicio.id}>{servicio.nombre}</option>
                                         ))}

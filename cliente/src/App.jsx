@@ -23,7 +23,7 @@ function App() {
         <Route path="/citas" element={<CitasList />} />
         <Route path="/citas/:fecha" element={<CitasList />} />
         <Route path="/pacientes" element={<PacientesList />} />
-        <Route path="/servicios" element={<ServiciosList/>} />
+        <Route path="/especialidades" element={<ServiciosList/>} />
       </Route>
     </Routes>
     )

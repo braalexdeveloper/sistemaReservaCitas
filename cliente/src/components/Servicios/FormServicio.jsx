@@ -7,7 +7,7 @@ const FormServicio = ({showModal,handleCloseModal,input,handleChange,handleSubmi
            {/* Modal que contiene el formulario */}
            <Modal show={showModal} onHide={handleCloseModal}>
                     <Modal.Header closeButton className="bg-primary text-white">
-                        <Modal.Title>{!input.id ? "Añadir Paciente" : "Editar Paciente"}</Modal.Title>
+                        <Modal.Title>{!input.id ? "Añadir Especialidad" : "Editar Especialidad"}</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
                         {/* Aquí renderizas el formulario */}
@@ -20,7 +20,7 @@ const FormServicio = ({showModal,handleCloseModal,input,handleChange,handleSubmi
                                 </div>
                                 <div class="mb-3">
                                     <label for="dni" class="form-label">Descripción</label>
-                                    <input type="text" name="descripcion" onChange={(e)=>handleChange(e)} value={input.descripcion} class="form-control" id="descripcion" aria-describedby="emailHelp" required />
+                                    <input type="text" name="descripcion" onChange={(e)=>handleChange(e)} value={input.descripcion} class="form-control" id="descripcion" aria-describedby="emailHelp" />
 
                                 </div>
                                 

@@ -68,7 +68,7 @@ function Login() {
                         <div class="card-body p-0">
 
                             <div class="row">
-                                <div class="col-lg-6 d-flex d-lg-flex justify-content-center align-items-center   bg-login-image ">
+                                <div class="col-lg-6 d-flex d-lg-flex justify-content-center align-items-center   bg-login-image pt-4">
                                 <img src={logo} width={200} alt='mydent' />
                                 </div>
                                 <div class="col-lg-6">

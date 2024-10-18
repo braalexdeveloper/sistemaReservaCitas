@@ -2,15 +2,16 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import logo from '../assets/img/logo-whi.png';
 
-const Sidebar = () => {
+const Sidebar = ({isToggled}) => {
+  console.log(isToggled)
   return (
     <>
-    <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+    <ul class={`menu ${isToggled ? 'open' : 'closed'} navbar-nav bg-gradient-primary sidebar sidebar-dark accordion`} >
 
         <Link class="sidebar-brand d-flex align-items-center justify-content-center" to="/">
             
-            <div class="sidebar-brand-text ">
-                <img src={logo} alt='mydent' />
+            <div >
+                <img class="img-fluid"  src={logo} alt='mydent' />
             </div>
         </Link>
 
@@ -30,9 +31,9 @@ const Sidebar = () => {
         </li>
 
         <li class="nav-item">
-        <Link class="nav-link" to="/servicios">
+        <Link class="nav-link" to="/especialidades">
         <i class="fas fa-clipboard-list"></i>
-                <span>Servicios</span></Link>
+                <span>Especialidades</span></Link>
         </li>
 
         <li class="nav-item">

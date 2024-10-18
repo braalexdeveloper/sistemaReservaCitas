@@ -3,3 +3,22 @@
     text-align: center;
     color:rgb(4, 111, 160)
 }
+
+/*.navbar {
+    position: relative;
+  }
+  
+  .toggle-button {
+    font-size: 30px;
+    cursor: pointer;
+  }*/
+  
+  .menu {
+    display: none !important; /* El menú estará oculto por defecto */
+    list-style-type: none;
+  }
+  
+  .menu.open {
+    display: block !important; /* Mostrar el menú cuando esté abierto */
+  }
+  
